@@ -1,0 +1,67 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table contest {
+  id integer [primary key]
+  categoryID integer  
+}
+
+Table users {
+  id integer [primary key]
+  username varchar
+  role varchar
+  created_at timestamp  
+}
+
+Table photo {
+  id integer [primary key]
+  title varchar
+  body text [note: 'Content of the post']
+  user_id integer
+  status varchar
+  created_at timestamp
+}
+
+Table ParticipatingPhotos {
+  id integer [primary key]  
+  photoId list
+  likes integer
+  photoLimit integer
+  categoryId integer
+}
+
+Table UserParticipation {
+  id integer [primary key]
+  contestID integer
+  userId integer
+  status string
+}
+
+Table JuryLikes {  
+  userId integer
+  participatingPhotoId integer
+}
+
+Table Category {
+  id integer [primary key]
+  participatingPhotoId integer
+}
+
+Table usercontests {  
+  
+  userId integer
+  contestId integer
+}
+
+Ref: "users"."id" < "photo"."user_id"
+Ref: "users"."id" < "UserParticipation"."userId"
+Ref: "contest"."id" < "UserParticipation"."contestID"
+Ref: "ParticipatingPhotos"."photoId" < "photo"."id"
+Ref: "Category"."id" > "contest"."categoryID"
+Ref: "users"."id" < "JuryLikes"."userId"
+Ref: "JuryLikes"."participatingPhotoId" < "ParticipatingPhotos"."id"
+Ref: "users"."id" < "usercontests"."userId"
+Ref: "contest"."id" < "usercontests"."contestId"
+Ref: "ParticipatingPhotos"."id" < "Category"."participatingPhotoId"
+
+  

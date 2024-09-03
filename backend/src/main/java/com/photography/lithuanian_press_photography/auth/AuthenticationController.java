@@ -1,8 +1,6 @@
 package com.photography.lithuanian_press_photography.auth;
 
-import com.photography.lithuanian_press_photography.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +19,6 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
         RegisterResponse response = service.register(request);
-
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("/api/v1/user/{id}")
@@ -31,14 +28,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<ApiResponse<AuthenticationResponse>> authenticate(@RequestBody AuthenticationRequest request
-    ) {
-        ApiResponse<AuthenticationResponse> response = new ApiResponse<>(
-                HttpStatus.OK.value(),
-                "authenticated successfully",
-                service.authenticate(request)
-        );
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+        return ResponseEntity.ok().body(service.authenticate(request));
     }
-
 }
