@@ -1,6 +1,6 @@
-package com.photography.lithuanian_prees_photography.auth;
+package com.photography.lithuanian_press_photography.auth;
 
-import com.photography.lithuanian_prees_photography.entity.User;
+import com.photography.lithuanian_press_photography.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

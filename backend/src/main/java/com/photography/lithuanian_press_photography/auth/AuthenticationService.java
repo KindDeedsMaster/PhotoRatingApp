@@ -1,9 +1,9 @@
-package com.photography.lithuanian_prees_photography.auth;
+package com.photography.lithuanian_press_photography.auth;
 
-import com.photography.lithuanian_prees_photography.config.JwtService;
-import com.photography.lithuanian_prees_photography.entity.User;
-import com.photography.lithuanian_prees_photography.enums.Role;
-import com.photography.lithuanian_prees_photography.repository.UserRepository;
+import com.photography.lithuanian_press_photography.config.JwtService;
+import com.photography.lithuanian_press_photography.entity.User;
+import com.photography.lithuanian_press_photography.enums.Role;
+import com.photography.lithuanian_press_photography.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

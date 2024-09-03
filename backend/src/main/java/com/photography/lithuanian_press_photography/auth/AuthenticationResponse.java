@@ -1,4 +1,4 @@
-package com.photography.lithuanian_prees_photography.auth;
+package com.photography.lithuanian_press_photography.auth;
 
 
 

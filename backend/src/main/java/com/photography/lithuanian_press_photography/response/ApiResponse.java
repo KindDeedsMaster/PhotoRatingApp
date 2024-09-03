@@ -1,4 +1,4 @@
-package com.photography.lithuanian_prees_photography.response;
+package com.photography.lithuanian_press_photography.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

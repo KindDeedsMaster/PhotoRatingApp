@@ -1,8 +1,8 @@
-package com.photography.lithuanian_prees_photography.fakedata;
+package com.photography.lithuanian_press_photography.fakedata;
 
-import com.photography.lithuanian_prees_photography.entity.User;
-import com.photography.lithuanian_prees_photography.enums.Role;
-import com.photography.lithuanian_prees_photography.repository.UserRepository;
+import com.photography.lithuanian_press_photography.entity.User;
+import com.photography.lithuanian_press_photography.enums.Role;
+import com.photography.lithuanian_press_photography.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;

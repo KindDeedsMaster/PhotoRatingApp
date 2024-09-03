@@ -1,8 +1,8 @@
-package com.photography.lithuanian_prees_photography.repository;
+package com.photography.lithuanian_press_photography.repository;
 
 
 
-import com.photography.lithuanian_prees_photography.entity.User;
+import com.photography.lithuanian_press_photography.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

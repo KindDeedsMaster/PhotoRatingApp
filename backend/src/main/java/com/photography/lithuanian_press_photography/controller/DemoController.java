@@ -1,4 +1,4 @@
-package com.photography.lithuanian_prees_photography.controller;
+package com.photography.lithuanian_press_photography.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

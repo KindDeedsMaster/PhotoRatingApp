@@ -1,6 +1,6 @@
-package com.photography.lithuanian_prees_photography.exeption;
+package com.photography.lithuanian_press_photography.exeption;
 
-import com.photography.lithuanian_prees_photography.response.ApiResponse;
+import com.photography.lithuanian_press_photography.response.ApiResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

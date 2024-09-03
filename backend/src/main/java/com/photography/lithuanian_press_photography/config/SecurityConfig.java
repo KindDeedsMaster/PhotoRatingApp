@@ -1,4 +1,4 @@
-package com.photography.lithuanian_prees_photography.config;
+package com.photography.lithuanian_press_photography.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

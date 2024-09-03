@@ -1,4 +1,4 @@
-package com.photography.lithuanian_prees_photography;
+package com.photography.lithuanian_press_photography;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

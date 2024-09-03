@@ -1,7 +1,7 @@
-package com.photography.lithuanian_prees_photography.entity;
+package com.photography.lithuanian_press_photography.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.photography.lithuanian_prees_photography.enums.Role;
+import com.photography.lithuanian_press_photography.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
