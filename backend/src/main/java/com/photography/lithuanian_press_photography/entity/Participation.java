@@ -21,10 +21,17 @@ public class Participation {
     @Column(name = "id")
     private UUID id;
 
-    @Setter
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private ParticipationStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "contest_id", nullable = false)
+    private Contest contest;
 
     @CreatedDate
     @Column(name = "created_at")

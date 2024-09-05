@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -14,6 +15,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Data
+@EqualsAndHashCode(exclude = "participation")
+@ToString(exclude = "participation")
 public class Contest {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -48,6 +51,9 @@ public class Contest {
     @LastModifiedDate
     @Column(name = "modified_at")
     private ZonedDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Participation> participation;
 
     @PrePersist
     protected void onCreate() {

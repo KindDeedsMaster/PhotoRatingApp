@@ -27,10 +27,11 @@ public class GenerateData implements CommandLineRunner {
     private final Faker faker = new Faker();
 
 
+
     @Override
     public void run(String... args) throws Exception {
         generateUsers();
-        generateContests(30);
+        generateContests(10);
         generateParticipation(10);
     }
 
@@ -95,6 +96,8 @@ public class GenerateData implements CommandLineRunner {
         for (int i = 0; i < participationQuantity; i++) {
             Participation participation = Participation.builder()
                     .status(ParticipationStatus.PENDING)
+                    .user(userRepository.findAll().get(faker.number().numberBetween(0,3)))
+                    .contest(contestRepository.findAll().get(faker.number().numberBetween(0,10)))
                     .build();
             participationRepository.save(participation);
         }

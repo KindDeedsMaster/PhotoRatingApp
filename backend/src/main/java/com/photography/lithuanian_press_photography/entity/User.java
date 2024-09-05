@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -21,6 +22,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "users")
 @Builder
+@EqualsAndHashCode(exclude = "participation")
+@ToString(exclude = "participation")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -46,6 +49,9 @@ public class User implements UserDetails {
     private ZonedDateTime createdAt;
     @LastModifiedDate
     private ZonedDateTime modifiedAt;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Participation> participation;
 
     @PrePersist
     protected void onCreate() {
