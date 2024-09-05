@@ -1,21 +1,32 @@
 package com.photography.lithuanian_press_photography.fakedata;
 
+import com.github.javafaker.DateAndTime;
+import com.github.javafaker.Faker;
+import com.photography.lithuanian_press_photography.entity.Contest;
 import com.photography.lithuanian_press_photography.entity.User;
 import com.photography.lithuanian_press_photography.enums.Role;
+import com.photography.lithuanian_press_photography.repository.ContestRepository;
 import com.photography.lithuanian_press_photography.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 @Component
 @RequiredArgsConstructor
 public class GenerateData implements CommandLineRunner {
     private final UserRepository userRepository;
+    private final ContestRepository contestRepository;
+    private final Faker faker = new Faker();
 
 
     @Override
     public void run(String... args) throws Exception {
         generateUsers();
+        generateContests(30);
     }
     private void generateUsers (){
         User user = User.builder()
@@ -60,5 +71,18 @@ public class GenerateData implements CommandLineRunner {
         userRepository.save(user);
         userRepository.save(user2);
         userRepository.save(user3);
+    }
+
+    private void generateContests (int contestQuantity){
+for (int i = 0; i < contestQuantity; i++){
+    Contest contest = Contest.builder()
+            .name(faker.commerce().productName())
+            .description(faker.lorem().sentence(70,150))
+            .startDate(ZonedDateTime.now())
+            .maxUserSubmissions(1+i)
+            .build();
+    contestRepository.save(contest);
+}
+
     }
 }
