@@ -2,11 +2,14 @@ package com.photography.lithuanian_press_photography.fakedata;
 
 import com.github.javafaker.DateAndTime;
 import com.github.javafaker.Faker;
+import com.photography.lithuanian_press_photography.entity.Category;
 import com.photography.lithuanian_press_photography.entity.Contest;
 import com.photography.lithuanian_press_photography.entity.Participation;
 import com.photography.lithuanian_press_photography.entity.User;
 import com.photography.lithuanian_press_photography.enums.ParticipationStatus;
+import com.photography.lithuanian_press_photography.enums.PhotoSubmissionType;
 import com.photography.lithuanian_press_photography.enums.Role;
+import com.photography.lithuanian_press_photography.repository.CategoryRepository;
 import com.photography.lithuanian_press_photography.repository.ContestRepository;
 import com.photography.lithuanian_press_photography.repository.ParticipationRepository;
 import com.photography.lithuanian_press_photography.repository.UserRepository;
@@ -24,6 +27,7 @@ public class GenerateData implements CommandLineRunner {
     private final UserRepository userRepository;
     private final ContestRepository contestRepository;
     private final ParticipationRepository participationRepository;
+    private final CategoryRepository categoryRepository;
     private final Faker faker = new Faker();
 
 
@@ -33,6 +37,7 @@ public class GenerateData implements CommandLineRunner {
         generateUsers();
         generateContests(10);
         generateParticipation(10);
+        generateCategory(15);
     }
 
     private void generateUsers() {
@@ -100,6 +105,20 @@ public class GenerateData implements CommandLineRunner {
                     .contest(contestRepository.findAll().get(faker.number().numberBetween(0,10)))
                     .build();
             participationRepository.save(participation);
+        }
+    }
+
+    private void generateCategory (int categoryQuantity) {
+        for (int i = 0; i < categoryQuantity; i++) {
+            Category category = Category.builder()
+                    .type(PhotoSubmissionType.SINGLE)
+                    .description(faker.lorem().sentence(15))
+                    .name(faker.commerce().productName())
+                    .maxUserSubmissions(5)
+                    .contest(contestRepository.findAll().get(faker.number().numberBetween(0,10)))
+                    .maxUserSubmissions(22)
+                    .build();
+            categoryRepository.save(category);
         }
     }
 }

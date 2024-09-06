@@ -1,23 +1,24 @@
 package com.photography.lithuanian_press_photography.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.photography.lithuanian_press_photography.enums.PhotoSubmissionType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.ZonedDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "contests")
+@Table(name = "categories")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-@EqualsAndHashCode(exclude = {"participation", "categories"})
-@ToString(exclude = {"participation", "categories"})
-public class Contest {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
@@ -25,9 +26,6 @@ public class Contest {
 
     @Column(name = "name")
     private String name;
-
-    @Column(name = "thumbnail_url")
-    private String thumbnailURL;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
@@ -38,11 +36,8 @@ public class Contest {
     @Column(name = "max_user_submissions")
     private long maxUserSubmissions;
 
-    @Column(name = "start_date")
-    private ZonedDateTime startDate;
-
-    @Column(name = "end_date")
-    private ZonedDateTime endDate;
+    @Column(name = "uploaded_photo")
+    private List<String> uploadedPhotos;
 
     @CreatedDate
     @Column(name = "created_at")
@@ -52,11 +47,12 @@ public class Contest {
     @Column(name = "modified_at")
     private ZonedDateTime modifiedAt;
 
-    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Participation> participation;
+    @Enumerated(EnumType.STRING)
+    private PhotoSubmissionType type;
 
-    @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Category> categories;
+    @ManyToOne
+    @JoinColumn(name = "contest_id")
+    private Contest contest;
 
     @PrePersist
     protected void onCreate() {
