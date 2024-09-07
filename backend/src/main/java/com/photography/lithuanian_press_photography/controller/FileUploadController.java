@@ -3,9 +3,9 @@ package com.photography.lithuanian_press_photography.controller;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+import com.photography.lithuanian_press_photography.exeption.StorageFileNotFoundException;
 import com.photography.lithuanian_press_photography.service.StorageService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.example.uploadingfiles.storage.StorageFileNotFoundException;
-import com.example.uploadingfiles.storage.StorageService;
 
 @Controller
 @RequiredArgsConstructor
@@ -64,9 +61,6 @@ public class FileUploadController {
         return "redirect:/";
     }
 
-    @ExceptionHandler(StorageFileNotFoundException.class)
-    public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
-        return ResponseEntity.notFound().build();
-    }
+
 
 }
