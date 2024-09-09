@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -53,6 +54,9 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "contest_id")
     private Contest contest;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PhotoParticipation> photoParticipation;
 
     @PrePersist
     protected void onCreate() {

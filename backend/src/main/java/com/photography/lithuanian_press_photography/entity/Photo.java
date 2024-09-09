@@ -34,6 +34,10 @@ public class Photo {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "photo_participation_id", nullable = false)
+    private PhotoParticipation photoParticipation;
+
     private ZonedDateTime createdAt;
     private ZonedDateTime modifiedAt;
 

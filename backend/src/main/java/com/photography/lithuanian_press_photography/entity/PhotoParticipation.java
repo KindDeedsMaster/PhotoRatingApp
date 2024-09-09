@@ -8,6 +8,7 @@ import lombok.*;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -21,10 +22,8 @@ public class PhotoParticipation {
     @Column(name = "id")
     private UUID id;
 
-
     @Column(name = "name", columnDefinition = "TEXT")
     private String name;
-
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
@@ -34,6 +33,13 @@ public class PhotoParticipation {
 
     @Column(name = "likes_count")
     private int likesCount;
+
+    @OneToMany(mappedBy = "photoParticipation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Photo> Photo;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     private ZonedDateTime createdAt;
     private ZonedDateTime modifiedAt;
