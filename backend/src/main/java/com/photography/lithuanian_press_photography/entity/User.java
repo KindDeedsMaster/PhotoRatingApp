@@ -53,6 +53,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Participation> participation;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Photo> Photo;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = ZonedDateTime.now();
