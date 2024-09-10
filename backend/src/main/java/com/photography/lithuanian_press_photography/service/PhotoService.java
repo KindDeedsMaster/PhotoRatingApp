@@ -1,5 +1,7 @@
 package com.photography.lithuanian_press_photography.service;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -10,6 +12,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import com.photography.lithuanian_press_photography.config.StorageProperties;
+import com.photography.lithuanian_press_photography.exeption.ImageProcessingException;
+import com.photography.lithuanian_press_photography.exeption.ImageValidationException;
 import com.photography.lithuanian_press_photography.exeption.StorageException;
 import com.photography.lithuanian_press_photography.exeption.StorageFileNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +22,17 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+
 @Service
-public class FileSystemStorageService implements StorageService {
+public class PhotoService {
 
     private final Path rootLocation;
 
     @Autowired
-    public FileSystemStorageService(StorageProperties properties) {
+    public PhotoService(StorageProperties properties) {
 
         if(properties.getLocation().trim().length() == 0){
             throw new StorageException("File upload location can not be Empty.");
@@ -36,7 +41,7 @@ public class FileSystemStorageService implements StorageService {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
-    @Override
+
     public void store(MultipartFile file) {
         try {
             if (file.isEmpty()) {
@@ -60,7 +65,7 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    @Override
+
     public Stream<Path> loadAll() {
         try {
             return Files.walk(this.rootLocation, 1)
@@ -73,12 +78,12 @@ public class FileSystemStorageService implements StorageService {
 
     }
 
-    @Override
+
     public Path load(String filename) {
         return rootLocation.resolve(filename);
     }
 
-    @Override
+
     public Resource loadAsResource(String filename) {
         try {
             Path file = load(filename);
@@ -97,12 +102,12 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    @Override
+
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 
-    @Override
+
     public void init() {
         try {
             Files.createDirectories(rootLocation);
@@ -113,8 +118,33 @@ public class FileSystemStorageService implements StorageService {
     }
 @Transactional(rollbackFor = StorageException.class)
     public void storeAll (MultipartFile[] files){
+        validateImages(files);
         for (MultipartFile file : files){
             store(file);
         }
     }
+    private void validateImages(MultipartFile[] images) {
+        for (MultipartFile image : images) {
+            if (!image.getContentType().equals("image/jpeg")) {
+                throw new ImageValidationException(image.getOriginalFilename()+"wrong type");
+            }
+            try (InputStream is = new ByteArrayInputStream(image.getBytes())){
+                BufferedImage img = ImageIO.read(is);
+                if (img.getHeight() > img.getWidth()) { // image is a portrait
+                    if (img.getHeight() < 2500 || img.getHeight() > 4000) {
+                        throw new ImageValidationException(image.getOriginalFilename()+ "b");
+                    }
+                } else {
+                    if (img.getWidth() < 2500 || img.getWidth() > 4000) {
+                        throw new ImageValidationException(image.getOriginalFilename()+ "a");
+                    }
+                }
+            } catch (IOException exception) {
+                throw new ImageProcessingException("Could not get image " +
+                        image.getOriginalFilename() + " input stream");
+            }
+        }
+    }
+
+
 }

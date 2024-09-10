@@ -1,5 +1,6 @@
 package com.photography.lithuanian_press_photography;
 
+import com.photography.lithuanian_press_photography.service.PhotoService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +8,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 
 import com.photography.lithuanian_press_photography.config.StorageProperties;
-import com.photography.lithuanian_press_photography.service.StorageService;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
@@ -18,10 +18,10 @@ public class PhotoRatingApp {
 	}
 
 	@Bean
-	CommandLineRunner init(StorageService storageService) {
+	CommandLineRunner init(PhotoService photoService) {
 		return (args) -> {
-			storageService.deleteAll();
-			storageService.init();
+			photoService.deleteAll();
+			photoService.init();
 		};
 	}
 }

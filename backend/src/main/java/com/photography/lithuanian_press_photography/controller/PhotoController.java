@@ -1,10 +1,10 @@
 package com.photography.lithuanian_press_photography.controller;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import com.photography.lithuanian_press_photography.service.StorageService;
+import com.photography.lithuanian_press_photography.service.PhotoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -21,23 +21,18 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-public class FileUploadController {
+@RequiredArgsConstructor
+public class PhotoController {
 
-    private final StorageService storageService;
-
-    @Autowired
-    public FileUploadController(StorageService storageService) {
-        this.storageService = storageService;
-    }
+    private final PhotoService photoService;
 
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
 
-        model.addAttribute("files", storageService.loadAll().map(
-                        path -> MvcUriComponentsBuilder.fromMethodName(FileUploadController.class,
+        model.addAttribute("files", photoService.loadAll().map(
+                        path -> MvcUriComponentsBuilder.fromMethodName(PhotoController.class,
                                 "serveFile", path.getFileName().toString()).build().toUri().toString())
                 .collect(Collectors.toList()));
-
         return "uploadForm";
     }
 
@@ -45,7 +40,7 @@ public class FileUploadController {
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
-        Resource file = storageService.loadAsResource(filename);
+        Resource file = photoService.loadAsResource(filename);
 
         if (file == null)
             return ResponseEntity.notFound().build();
@@ -55,11 +50,11 @@ public class FileUploadController {
     }
 
     @PostMapping("/")
-    public String handleFileUpload(@RequestParam("files") MultipartFile[] files,
+    public String handleFilesUpload(@RequestParam("files") MultipartFile[] files,
                                    RedirectAttributes redirectAttributes) {
 
 
-        storageService.storeAll(files);
+        photoService.storeAll(files);
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded photos!");
 
