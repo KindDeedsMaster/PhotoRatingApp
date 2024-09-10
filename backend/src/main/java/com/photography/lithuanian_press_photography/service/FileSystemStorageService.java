@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -108,6 +109,12 @@ public class FileSystemStorageService implements StorageService {
         }
         catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
+        }
+    }
+@Transactional(rollbackFor = StorageException.class)
+    public void storeAll (MultipartFile[] files){
+        for (MultipartFile file : files){
+            store(file);
         }
     }
 }

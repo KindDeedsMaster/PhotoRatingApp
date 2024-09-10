@@ -8,9 +8,10 @@ import java.nio.file.Path;
 
 public interface StorageService {
     void init();
-    void store(MultipartFile file);
+    void store(MultipartFile files);
     Stream<Path> loadAll();
     Path load (String filename);
     Resource loadAsResource(String filename);
     void deleteAll();
+    void storeAll(MultipartFile[] files);
 }

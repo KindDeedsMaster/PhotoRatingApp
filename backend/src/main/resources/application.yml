@@ -1,8 +1,10 @@
 spring:
   servlet:
     multipart:
+      enabled: true
       max-file-size: 128KB
       max-request-size: 128KB
+      location: ${java.io.tmpdir}
   application:
     name: lithuanian-press-photography
   datasource:

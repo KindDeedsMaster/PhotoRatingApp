@@ -1,12 +1,13 @@
 package com.photography.lithuanian_press_photography;
 
-import com.photography.lithuanian_press_photography.config.StorageProperties;
-import com.photography.lithuanian_press_photography.service.StorageService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+
+import com.photography.lithuanian_press_photography.config.StorageProperties;
+import com.photography.lithuanian_press_photography.service.StorageService;
 
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)

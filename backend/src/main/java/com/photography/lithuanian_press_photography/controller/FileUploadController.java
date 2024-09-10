@@ -1,17 +1,16 @@
 package com.photography.lithuanian_press_photography.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import com.photography.lithuanian_press_photography.exeption.StorageFileNotFoundException;
 import com.photography.lithuanian_press_photography.service.StorageService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +21,14 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequiredArgsConstructor
 public class FileUploadController {
+
     private final StorageService storageService;
+
+    @Autowired
+    public FileUploadController(StorageService storageService) {
+        this.storageService = storageService;
+    }
 
     @GetMapping("/")
     public String listUploadedFiles(Model model) throws IOException {
@@ -51,16 +55,14 @@ public class FileUploadController {
     }
 
     @PostMapping("/")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file,
+    public String handleFileUpload(@RequestParam("files") MultipartFile[] files,
                                    RedirectAttributes redirectAttributes) {
 
-        storageService.store(file);
+
+        storageService.storeAll(files);
         redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded " + file.getOriginalFilename() + "!");
+                "You successfully uploaded photos!");
 
         return "redirect:/";
     }
-
-
-
 }
