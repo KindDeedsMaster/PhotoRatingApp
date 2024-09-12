@@ -1,5 +1,6 @@
 package com.photography.lithuanian_press_photography.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
@@ -59,5 +60,13 @@ public class PhotoController {
                 "You successfully uploaded photos!");
 
         return "redirect:/";
+    }
+
+    @GetMapping("/meta")
+    @ResponseBody
+    public ResponseEntity<?> meta() throws IOException {
+        File img = new File("C:\\Users\\anton\\OneDrive\\Desktop\\IMG_0152.jpg");
+        photoService.readImageMeta(img);
+        return ResponseEntity.ok().body("qq");
     }
 }
