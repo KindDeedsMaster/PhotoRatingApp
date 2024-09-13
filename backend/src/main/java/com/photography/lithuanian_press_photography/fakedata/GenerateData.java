@@ -3,7 +3,7 @@ package com.photography.lithuanian_press_photography.fakedata;
 import com.github.javafaker.Faker;
 import com.photography.lithuanian_press_photography.entity.Category;
 import com.photography.lithuanian_press_photography.entity.Contest;
-import com.photography.lithuanian_press_photography.entity.Participation;
+import com.photography.lithuanian_press_photography.entity.UserParticipation;
 import com.photography.lithuanian_press_photography.entity.User;
 import com.photography.lithuanian_press_photography.enums.ParticipationStatus;
 import com.photography.lithuanian_press_photography.enums.PhotoSubmissionType;
@@ -96,12 +96,12 @@ public class GenerateData implements CommandLineRunner {
     }
     private void generateParticipation(int participationQuantity){
         for (int i = 0; i < participationQuantity; i++) {
-            Participation participation = Participation.builder()
+            UserParticipation userParticipation = UserParticipation.builder()
                     .status(ParticipationStatus.PENDING)
                     .user(userRepository.findAll().get(faker.number().numberBetween(0,3)))
                     .contest(contestRepository.findAll().get(faker.number().numberBetween(0,10)))
                     .build();
-            userParticipationRepository.save(participation);
+            userParticipationRepository.save(userParticipation);
         }
     }
 

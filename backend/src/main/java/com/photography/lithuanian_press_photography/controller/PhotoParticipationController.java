@@ -17,52 +17,51 @@ import java.net.URI;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(path = "api/v1/photosParticipation")
+@RequestMapping(path = "api/v1")
 @Validated
 @RequiredArgsConstructor
 public class PhotoParticipationController {
     private final PhotoParticipationService photoParticipationService;
 
-    @GetMapping
-    public ResponseEntity<Page<PhotoParticipation>> getAllPhotosParticipation(@RequestParam(defaultValue = "0") int pageNumber,
+    @GetMapping(path = "/category/{categoryId}/photosParticipation")
+    public ResponseEntity<Page<PhotoParticipation>> getAllPhotosParticipation(@PathVariable UUID categoryId,
+                                                                              @RequestParam(defaultValue = "0") int pageNumber,
                                                                               @RequestParam(defaultValue = "25") int pageSize,
                                                                               @RequestParam(defaultValue = "createdAt") String sortBy,
-                                                                              @RequestParam(defaultValue = "true") boolean sortDesc
-    ) {
+                                                                              @RequestParam(defaultValue = "true") boolean sortDesc) {
         Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
         Sort sort = Sort.by(direction, sortBy);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-        return ResponseEntity.ok().body(photoParticipationService.getAllPhotosParticipation(pageRequest));
+        return ResponseEntity.ok().body(photoParticipationService.getPhotoParticipationByCategoryId(categoryId, pageRequest));
     }
 
-    @GetMapping(path = "/{photosParticipationId}")
-    public ResponseEntity<PhotoParticipation> getPhotoParticipation(@PathVariable UUID photosParticipationId) {
-        return ResponseEntity.ok().body(photoParticipationService.getPhotosParticipationById(photosParticipationId));
+    @GetMapping(path = "/photosParticipation/{id}")
+    public ResponseEntity<PhotoParticipation> getPhotoParticipation(@PathVariable UUID id) {
+        return ResponseEntity.ok().body(photoParticipationService.getPhotosParticipationById(id));
     }
 
-    @PostMapping(path = "/category/{categoryId}")
+    @PostMapping(path = "/category/{categoryId}/photosParticipation")
     public ResponseEntity<PhotoParticipation> createPhotosParticipation(@PathVariable UUID categoryId,
                                                                         @RequestBody PhotoParticipationRequest request) {
         PhotoParticipation photoParticipation = photoParticipationService.createPhotoParticipation(request, categoryId);
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/api/v1/photosParticipation/{photosParticipationId}")
+                .fromCurrentRequest()
+                .path("/{id}")
                 .buildAndExpand(photoParticipation.getId())
                 .toUri();
         return ResponseEntity.created(location).body(photoParticipation);
     }
 
-    @PutMapping("/{photosParticipationId}")
-    public ResponseEntity<PhotoParticipation> updatePhotosParticipation(@PathVariable UUID photosParticipationId,
-                                                                       @RequestBody @Valid PhotoParticipationRequest request) {
-        return ResponseEntity
-                .ok()
-                .body(photoParticipationService.updatePhotoParticipation(request, photosParticipationId));
+    @PutMapping("/photosParticipation/{id}")
+    public ResponseEntity<PhotoParticipation> updatePhotosParticipation(@PathVariable UUID id,
+                                                                        @RequestBody @Valid PhotoParticipationRequest request) {
+        return ResponseEntity.ok().body(photoParticipationService.updatePhotoParticipation(request, id));
     }
 
-    @DeleteMapping("/{photosParticipationId}")
-    public ResponseEntity<?> deletePhotosParticipation(@PathVariable UUID photosParticipationId) {
-        photoParticipationService.deletePhotoParticipation(photosParticipationId);
+    @DeleteMapping("/photosParticipation/{id}")
+    public ResponseEntity<?> deletePhotosParticipation(@PathVariable UUID id) {
+        photoParticipationService.deletePhotoParticipation(id);
         return ResponseEntity.noContent().build();
     }
+
 }

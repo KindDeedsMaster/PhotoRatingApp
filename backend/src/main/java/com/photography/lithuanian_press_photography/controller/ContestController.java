@@ -28,11 +28,10 @@ public class ContestController {
     private final ContestService contestService;
 
     @GetMapping
-    public ResponseEntity<Page<Contest>> getAllContests (@RequestParam(defaultValue = "0") int pageNumber,
-                                                         @RequestParam(defaultValue = "25") int pageSize,
-                                                         @RequestParam(defaultValue = "createdAt") String sortBy,
-                                                         @RequestParam(defaultValue = "true") boolean sortDesc
-    ){
+    public ResponseEntity<Page<Contest>> getAllContests(@RequestParam(defaultValue = "0") int pageNumber,
+                                                        @RequestParam(defaultValue = "25") int pageSize,
+                                                        @RequestParam(defaultValue = "createdAt") String sortBy,
+                                                        @RequestParam(defaultValue = "true") boolean sortDesc) {
         Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
         Sort sort = Sort.by(direction, sortBy);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
@@ -45,11 +44,11 @@ public class ContestController {
     }
 
     @PostMapping
-    public ResponseEntity<Contest> createContest (@RequestBody ContestRequest reequest){
-        Contest contest = contestService.createContest(reequest);
+    public ResponseEntity<Contest> createContest(@RequestBody ContestRequest request) {
+        Contest contest = contestService.createContest(request);
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/api/v1/contests/{contestId}")
+                .fromCurrentRequest()
+                .path("/{contestId}")
                 .buildAndExpand(contest.getId())
                 .toUri();
         return ResponseEntity.created(location).body(contest);
@@ -57,10 +56,7 @@ public class ContestController {
 
     @PutMapping("/{contestId}")
     public ResponseEntity<Contest> updateContest(@PathVariable UUID contestId, @RequestBody @Valid ContestRequest contestRequest) {
-
-            return ResponseEntity.ok().body(contestService.updateContest(contestRequest, contestId));
-
-
+        return ResponseEntity.ok().body(contestService.updateContest(contestRequest, contestId));
     }
 
     @DeleteMapping("/{contestId}")
@@ -68,8 +64,4 @@ public class ContestController {
         contestService.deleteContest(contestId);
         return ResponseEntity.noContent().build();
     }
-
-
-
-
 }

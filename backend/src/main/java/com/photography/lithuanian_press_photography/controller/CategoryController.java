@@ -51,7 +51,7 @@ public class CategoryController {
         Category category = categoryService.createCategory(categoryDTO, contestId);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/categoryId")
+                .path("/{categoryId}")
                 .buildAndExpand(category.getId())
                 .toUri();
         return ResponseEntity.created(location).body(category);

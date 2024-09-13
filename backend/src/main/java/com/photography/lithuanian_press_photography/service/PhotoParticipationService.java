@@ -20,20 +20,20 @@ public class PhotoParticipationService {
     private final PhotoParticipationRepository photoParticipationRepository;
     private final CategoryService categoryService;
 
-    public Page<PhotoParticipation> getAllPhotosParticipation(PageRequest pageRequest) {
-        return photoParticipationRepository.findAll(pageRequest);
+    public Page<PhotoParticipation> getPhotoParticipationByCategoryId(UUID categoryId, PageRequest pageRequest) {
+        return photoParticipationRepository.findByCategoryId(categoryId, pageRequest);
     }
 
     public PhotoParticipation getPhotosParticipationById(UUID photoParticipationId) {
         return photoParticipationRepository.findById(photoParticipationId)
-                .orElseThrow(() -> new EntityNotFoundException("photo participation not found with id: " + photoParticipationId));
+                .orElseThrow(() -> new EntityNotFoundException("photo userParticipation not found with id: " + photoParticipationId));
     }
 
     public void deletePhotoParticipation(UUID photoParticipationId) {
         if (photoParticipationRepository.existsById(photoParticipationId)) {
             photoParticipationRepository.deleteById(photoParticipationId);
         } else {
-            throw new EntityNotFoundException("photo participation not found with Id: " + photoParticipationId);
+            throw new EntityNotFoundException("photo userParticipation not found with Id: " + photoParticipationId);
         }
     }
 
@@ -51,7 +51,7 @@ public class PhotoParticipationService {
 
     public PhotoParticipation updatePhotoParticipation(PhotoParticipationRequest request, UUID photoParticipationId) {
         PhotoParticipation photoParticipation = photoParticipationRepository.findById(photoParticipationId)
-                .orElseThrow(() -> new EntityNotFoundException("photo participation not found"));
+                .orElseThrow(() -> new EntityNotFoundException("photo userParticipation not found"));
         photoParticipation.setName(request.getName());
         photoParticipation.setDescription(request.getDescription());
         photoParticipationRepository.save(photoParticipation);

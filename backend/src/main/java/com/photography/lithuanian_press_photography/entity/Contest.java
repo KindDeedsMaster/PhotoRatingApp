@@ -16,8 +16,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Data
-@EqualsAndHashCode(exclude = {"participation", "categories"})
-@ToString(exclude = {"participation", "categories"})
+@EqualsAndHashCode(exclude = {"userParticipation", "categories"})
+@ToString(exclude = {"userParticipation", "categories"})
 public class Contest {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -55,7 +55,7 @@ public class Contest {
 
     @JsonIgnore
     @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Participation> participation;
+    private Set<UserParticipation> participation;
 
     @JsonIgnore
     @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
