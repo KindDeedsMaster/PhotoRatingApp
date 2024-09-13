@@ -16,6 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(exclude = {"photos"})
+@ToString(exclude = {"photos"})
 public class PhotoParticipation {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -38,7 +40,7 @@ public class PhotoParticipation {
     private long uploadsLeft;
 
     @OneToMany(mappedBy = "photoParticipation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Photo> Photo;
+    private Set<Photo> photos;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
