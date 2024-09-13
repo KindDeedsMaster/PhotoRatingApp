@@ -34,6 +34,9 @@ public class PhotoParticipation {
     @Column(name = "likes_count")
     private int likesCount;
 
+    @Column(name = "uploads_left")
+    private long uploadsLeft;
+
     @OneToMany(mappedBy = "photoParticipation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Photo> Photo;
 
