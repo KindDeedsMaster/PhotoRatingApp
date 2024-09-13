@@ -2,16 +2,13 @@ package com.photography.lithuanian_press_photography.exeption;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,48 +16,79 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    public ProblemDetail handleEntityNotFoundException(EntityNotFoundException exception) {
+        ProblemDetail response = ProblemDetail.forStatus(404);
+        response.setTitle("Entity Not Found");
+        response.setStatus(response.getStatus());
+        response.setDetail(exception.getMessage());
+        return response;
     }
 
     @ExceptionHandler(EntityExistsException.class)
-    public ResponseEntity<String> handleEntityExistsException(EntityExistsException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.CONFLICT);
+    public ProblemDetail handleEntityExistsException(EntityExistsException exception) {
+        ProblemDetail response = ProblemDetail.forStatus(409);
+        response.setTitle("Entity Exists");
+        response.setStatus(response.getStatus());
+        response.setDetail(exception.getMessage());
+        return response;
     }
 
     @ExceptionHandler(StorageFileNotFoundException.class)
-    public ResponseEntity<String> handleStorageFileNotFound(StorageFileNotFoundException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    public ProblemDetail handleStorageFileNotFound(StorageFileNotFoundException exception) {
+        ProblemDetail response = ProblemDetail.forStatus(404);
+        response.setTitle("File Not Found");
+        response.setStatus(response.getStatus());
+        response.setDetail(exception.getMessage());
+        return response;
     }
 
     @ExceptionHandler(StorageException.class)
-    public ResponseEntity<String> handleStorageException(StorageException exception){
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    public ProblemDetail handleStorageException(StorageException exception) {
+        ProblemDetail response = ProblemDetail.forStatus(400);
+        response.setTitle("Image Storage Error");
+        response.setStatus(response.getStatus());
+        response.setDetail(exception.getMessage());
+        return response;
     }
 
     @ExceptionHandler({ImageValidationException.class})
-    public ResponseEntity<String> handleImageValidationError(ImageValidationException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    public ProblemDetail handleImageValidationError(ImageValidationException exception) {
+        ProblemDetail response = ProblemDetail.forStatus(400);
+        response.setTitle("Image Validation Error");
+        response.setStatus(response.getStatus());
+        response.setDetail(exception.getMessage());
+        return response;
     }
 
     @ExceptionHandler({ImageProcessingException.class})
-    public ResponseEntity<String> handleImageProcessingError(ImageProcessingException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    public ProblemDetail handleImageProcessingError(ImageProcessingException exception) {
+        ProblemDetail response = ProblemDetail.forStatus(400);
+        response.setTitle("Image Processing Error");
+        response.setStatus(response.getStatus());
+        response.setDetail(exception.getMessage());
+        return response;
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ResponseEntity<Map<String,String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception){
+    public ProblemDetail handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         Map<String, String> errors = new HashMap<>();
-        exception.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
+            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+        ProblemDetail response = ProblemDetail.forStatus(400);
+        response.setTitle("Validation Error");
+        response.setStatus(response.getStatus());
+        response.setDetail("One or more fields contain invalid data.");
+        response.setProperty("errors", errors);
+        return response;
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    public ProblemDetail handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
+        ProblemDetail response = ProblemDetail.forStatus(400);
+        response.setTitle("Parsing Error");
+        response.setStatus(response.getStatus());
+        response.setDetail(exception.getMessage());
+        return response;
     }
 }
