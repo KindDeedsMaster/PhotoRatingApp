@@ -1,8 +1,8 @@
 package com.photography.lithuanian_press_photography.dto.request.photo;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
@@ -14,12 +14,12 @@ import java.util.UUID;
 @ToString
 public class PhotoRequest {
 
-    @NonNull
+    @NotNull
     @NotBlank
     @Length(max = 100, message = "PHOTO_NAME_LENGTH_EXCEEDED")
     private String name;
 
-    @NonNull
+    @NotNull
     @NotBlank
     @Length(max = 1000, message = "PHOTO_DESCRIPTION_LENGTH_EXCEEDED")
     private String description;

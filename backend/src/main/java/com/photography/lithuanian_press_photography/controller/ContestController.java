@@ -57,7 +57,10 @@ public class ContestController {
 
     @PutMapping("/{contestId}")
     public ResponseEntity<Contest> updateContest(@PathVariable UUID contestId, @RequestBody @Valid ContestRequest contestRequest) {
-        return ResponseEntity.ok().body(contestService.updateContest(contestRequest, contestId));
+
+            return ResponseEntity.ok().body(contestService.updateContest(contestRequest, contestId));
+
+
     }
 
     @DeleteMapping("/{contestId}")
