@@ -57,6 +57,7 @@ public class Category {
     @JoinColumn(name = "contest_id")
     private Contest contest;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PhotoParticipation> photoParticipation;
 

@@ -39,6 +39,7 @@ public class PhotoParticipation {
     @Column(name = "uploads_left")
     private long uploadsLeft;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "photoParticipation", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Photo> photos;
 

@@ -50,9 +50,11 @@ public class User implements UserDetails {
     @LastModifiedDate
     private ZonedDateTime modifiedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Participation> participation;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Photo> photos;
 

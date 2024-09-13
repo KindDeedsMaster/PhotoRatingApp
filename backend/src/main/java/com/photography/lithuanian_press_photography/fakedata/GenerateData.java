@@ -1,6 +1,5 @@
 package com.photography.lithuanian_press_photography.fakedata;
 
-import com.github.javafaker.DateAndTime;
 import com.github.javafaker.Faker;
 import com.photography.lithuanian_press_photography.entity.Category;
 import com.photography.lithuanian_press_photography.entity.Contest;
@@ -11,22 +10,20 @@ import com.photography.lithuanian_press_photography.enums.PhotoSubmissionType;
 import com.photography.lithuanian_press_photography.enums.Role;
 import com.photography.lithuanian_press_photography.repository.CategoryRepository;
 import com.photography.lithuanian_press_photography.repository.ContestRepository;
-import com.photography.lithuanian_press_photography.repository.ParticipationRepository;
+import com.photography.lithuanian_press_photography.repository.UserParticipationRepository;
 import com.photography.lithuanian_press_photography.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
 public class GenerateData implements CommandLineRunner {
     private final UserRepository userRepository;
     private final ContestRepository contestRepository;
-    private final ParticipationRepository participationRepository;
+    private final UserParticipationRepository userParticipationRepository;
     private final CategoryRepository categoryRepository;
     private final Faker faker = new Faker();
 
@@ -104,7 +101,7 @@ public class GenerateData implements CommandLineRunner {
                     .user(userRepository.findAll().get(faker.number().numberBetween(0,3)))
                     .contest(contestRepository.findAll().get(faker.number().numberBetween(0,10)))
                     .build();
-            participationRepository.save(participation);
+            userParticipationRepository.save(participation);
         }
     }
 

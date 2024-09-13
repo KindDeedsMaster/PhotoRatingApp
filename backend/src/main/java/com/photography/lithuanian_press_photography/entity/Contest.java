@@ -1,5 +1,6 @@
 package com.photography.lithuanian_press_photography.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -52,9 +53,11 @@ public class Contest {
     @Column(name = "modified_at")
     private ZonedDateTime modifiedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Participation> participation;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Category> categories;
 

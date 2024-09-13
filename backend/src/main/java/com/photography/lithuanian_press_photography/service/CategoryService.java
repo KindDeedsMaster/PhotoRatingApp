@@ -16,6 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final ContestService contestService;
 
     public Page<Category> getAllCategories(PageRequest pageRequest) {
         return categoryRepository.findAll(pageRequest);
@@ -34,13 +35,14 @@ public class CategoryService {
         }
     }
 
-    public Category createCategory(CategoryDTO categoryDTO){
+    public Category createCategory(CategoryDTO categoryDTO, UUID contestId){
         Category category = Category.builder()
                 .name(categoryDTO.getName())
                 .description(categoryDTO.getDescription())
                 .type(categoryDTO.getType())
                 .maxTotalSubmissions(categoryDTO.getMaxTotalSubmissions())
                 .maxUserSubmissions(categoryDTO.getMaxUserSubmissions())
+                .contest(contestService.getContestById(contestId))
                 .build();
         categoryRepository.save(category);
         return category;
