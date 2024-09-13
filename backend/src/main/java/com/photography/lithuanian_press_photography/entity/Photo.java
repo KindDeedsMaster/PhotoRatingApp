@@ -22,12 +22,12 @@ public class Photo {
     private UUID id;
 
     private String localPathFull;
-    private String localPathMiddle;
-    private String localPathSmall;
+//    private String localPathMiddle;
+//    private String localPathSmall;
     private String localPathThumbnail;
     private String urlFull;
-    private String urlMiddle;
-    private String urlSmall;
+//    private String urlMiddle;
+//    private String urlSmall;
     private String urlThumbnail;
 
     @ManyToOne

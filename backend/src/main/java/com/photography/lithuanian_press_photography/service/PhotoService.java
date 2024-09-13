@@ -10,13 +10,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import com.photography.lithuanian_press_photography.config.StorageProperties;
+import com.photography.lithuanian_press_photography.dto.request.photo.PhotoRequest;
 import com.photography.lithuanian_press_photography.exeption.ImageProcessingException;
 import com.photography.lithuanian_press_photography.exeption.ImageValidationException;
 import com.photography.lithuanian_press_photography.exeption.StorageException;
 import com.photography.lithuanian_press_photography.exeption.StorageFileNotFoundException;
+import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.common.ImageMetadata;
 import org.apache.commons.imaging.common.RationalNumber;
@@ -43,22 +46,32 @@ public class PhotoService {
     @Autowired
     public PhotoService(StorageProperties properties) {
 
-        if(properties.getLocation().trim().length() == 0){
+        if (properties.getLocation().trim().length() == 0) {
             throw new StorageException("File upload location can not be Empty.");
         }
 
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
+    public void createPhotoParticipation(PhotoRequest photoRequest) {
+        storeAll(photoRequest);
 
-    public void store(MultipartFile file) {
+    }
+
+    public UUID store(MultipartFile file, UUID categoryId) {
+        UUID photoId = UUID.randomUUID();
+        String photoName = photoId + ".jpg";
+        String thumbNail = photoId + ".png";
+        if (file.isEmpty()) {
+            throw new StorageException("Failed to store empty file.");
+        }
         try {
-            if (file.isEmpty()) {
-                throw new StorageException("Failed to store empty file.");
-            }
-            Path destinationFile = this.rootLocation.resolve(
-                            Paths.get(file.getOriginalFilename()))
-                    .normalize().toAbsolutePath();
+            Path destinationFile = this.rootLocation
+                    .resolve(categoryId.toString())
+                    .resolve(photoName)
+                    .normalize()
+                    .toAbsolutePath();
+            System.out.println(destinationFile);
             if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
                 // This is a security check
                 throw new StorageException(
@@ -67,11 +80,19 @@ public class PhotoService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile,
                         StandardCopyOption.REPLACE_EXISTING);
+                Path thumbnailPath = this.rootLocation
+                        .resolve(categoryId.toString())
+                        .resolve(thumbNail)
+                        .normalize()
+                        .toAbsolutePath();
+                Thumbnails.of(destinationFile.toString())
+                        .size(160, 160)
+                        .toFile(new File(thumbnailPath.toUri()));
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }
+        return photoId;
     }
 
 
@@ -80,8 +101,7 @@ public class PhotoService {
             return Files.walk(this.rootLocation, 1)
                     .filter(path -> !path.equals(this.rootLocation))
                     .map(this.rootLocation::relativize);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }
 
@@ -99,14 +119,12 @@ public class PhotoService {
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
-            }
-            else {
+            } else {
                 throw new StorageFileNotFoundException(
                         "Could not read file: " + filename);
 
             }
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         }
     }
@@ -120,32 +138,36 @@ public class PhotoService {
     public void init() {
         try {
             Files.createDirectories(rootLocation);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
         }
     }
-@Transactional(rollbackFor = StorageException.class)
-    public void storeAll (MultipartFile[] files){
+
+    @Transactional(rollbackFor = StorageException.class)
+    public void storeAll(PhotoRequest request) {
+        MultipartFile[] files = request.getFiles();
         validateImages(files);
-        for (MultipartFile file : files){
-            store(file);
+        for (MultipartFile file : files) {
+            UUID photoId = store(file, request.getCategoryId());
+
+
         }
     }
+
     private void validateImages(MultipartFile[] images) {
         for (MultipartFile image : images) {
             if (!image.getContentType().equals("image/jpeg")) {
-                throw new ImageValidationException(image.getOriginalFilename()+"wrong type");
+                throw new ImageValidationException(image.getOriginalFilename() + "wrong type");
             }
-            try (InputStream is = new ByteArrayInputStream(image.getBytes())){
+            try (InputStream is = new ByteArrayInputStream(image.getBytes())) {
                 BufferedImage img = ImageIO.read(is);
                 if (img.getHeight() > img.getWidth()) { // image is a portrait
                     if (img.getHeight() < 2500 || img.getHeight() > 4000) {
-                        throw new ImageValidationException(image.getOriginalFilename()+ " Image height must be between 2500 and 4000");
+                        throw new ImageValidationException(image.getOriginalFilename() + " Image height must be between 2500 and 4000");
                     }
                 } else {
                     if (img.getWidth() < 2500 || img.getWidth() > 4000) {
-                        throw new ImageValidationException(image.getOriginalFilename()+ "Image width must be between 2500 and 4000");
+                        throw new ImageValidationException(image.getOriginalFilename() + "Image width must be between 2500 and 4000");
                     }
                 }
             } catch (IOException exception) {

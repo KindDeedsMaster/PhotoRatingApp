@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+import com.photography.lithuanian_press_photography.dto.request.photo.PhotoRequest;
 import com.photography.lithuanian_press_photography.service.PhotoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -50,17 +50,17 @@ public class PhotoController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping("/")
-    public String handleFilesUpload(@RequestParam("files") MultipartFile[] files,
-                                   RedirectAttributes redirectAttributes) {
-
-
-        photoService.storeAll(files);
-        redirectAttributes.addFlashAttribute("message",
-                "You successfully uploaded photos!");
-
-        return "redirect:/";
-    }
+//    @PostMapping("/")
+//    public String handleFilesUpload(@RequestParam("files") MultipartFile[] files,
+//                                   RedirectAttributes redirectAttributes) {
+//
+//
+//        photoService.storeAll(files);
+//        redirectAttributes.addFlashAttribute("message",
+//                "You successfully uploaded photos!");
+//
+//        return "redirect:/";
+//    }
 
     @GetMapping("/meta")
     @ResponseBody
@@ -68,5 +68,16 @@ public class PhotoController {
         File img = new File("C:\\Users\\anton\\OneDrive\\Desktop\\IMG_0152.jpg");
         photoService.readImageMeta(img);
         return ResponseEntity.ok().body("qq");
+    }
+    @PostMapping("/")
+    public String uploadPhotosToCategory(@RequestParam PhotoRequest request,
+                                         RedirectAttributes redirectAttributes) {
+
+
+        photoService.createPhotoParticipation(request);
+        redirectAttributes.addFlashAttribute("message",
+                "You successfully uploaded photos!");
+
+        return "redirect:/";
     }
 }
