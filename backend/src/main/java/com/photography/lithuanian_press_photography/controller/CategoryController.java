@@ -29,15 +29,15 @@ public class CategoryController {
 
 
     @GetMapping(path = "/contests/{contestId}/category")
-    public ResponseEntity<Page<Category>> getAllCategories(@RequestParam(defaultValue = "0") int pageNumber,
-                                                           @RequestParam(defaultValue = "25") int pageSize,
-                                                           @RequestParam(defaultValue = "createdAt") String sortBy,
-                                                           @RequestParam(defaultValue = "true") boolean sortDesc
-    ) {
+    public ResponseEntity<Page<Category>> getCategoriesInContest(@PathVariable UUID contestId,
+                                                                 @RequestParam(defaultValue = "0") int pageNumber,
+                                                                 @RequestParam(defaultValue = "25") int pageSize,
+                                                                 @RequestParam(defaultValue = "createdAt") String sortBy,
+                                                                 @RequestParam(defaultValue = "true") boolean sortDesc) {
         Sort.Direction direction = sortDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
         Sort sort = Sort.by(direction, sortBy);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sort);
-        return ResponseEntity.ok().body(categoryService.getAllCategories(pageRequest));
+        return ResponseEntity.ok().body(categoryService.getCategoriesByContestId(contestId, pageRequest));
     }
 
     @GetMapping(path = "/category/{categoryId}")

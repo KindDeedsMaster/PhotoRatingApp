@@ -8,6 +8,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -18,6 +19,9 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final ContestService contestService;
 
+    public Page<Category> getCategoriesByContestId (UUID contestId, Pageable pageable){
+        return categoryRepository.findByContestId(contestId, pageable);
+    }
     public Page<Category> getAllCategories(PageRequest pageRequest) {
         return categoryRepository.findAll(pageRequest);
     }

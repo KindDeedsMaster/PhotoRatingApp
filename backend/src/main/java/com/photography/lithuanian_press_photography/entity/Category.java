@@ -19,8 +19,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Data
-@EqualsAndHashCode(exclude = {"photoParticipation", "contest"})
-@ToString(exclude = {"photoParticipation", "contest"})
+@EqualsAndHashCode(exclude = {"photoParticipation"})
+@ToString(exclude = {"photoParticipation"})
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
