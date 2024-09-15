@@ -22,8 +22,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "users")
 @Builder
-@EqualsAndHashCode(exclude = {"userParticipation", "photos"})
-@ToString(exclude = {"userParticipation", "photos"})
+@EqualsAndHashCode(exclude = {"userParticipation", "photoParticipation"})
+@ToString(exclude = {"userParticipation", "photoParticipation"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -53,10 +53,6 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserParticipation> userParticipation;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Photo> photos;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

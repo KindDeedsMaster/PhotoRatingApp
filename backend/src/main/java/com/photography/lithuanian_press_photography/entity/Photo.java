@@ -31,10 +31,6 @@ public class Photo {
     private String urlThumbnail;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne
     @JoinColumn(name = "photo_participation_id", nullable = false)
     private PhotoParticipation photoParticipation;
 
