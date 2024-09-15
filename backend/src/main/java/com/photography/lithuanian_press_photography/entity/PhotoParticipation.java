@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -47,7 +49,14 @@ public class PhotoParticipation {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @CreatedDate
     private ZonedDateTime createdAt;
+
+    @LastModifiedDate
     private ZonedDateTime modifiedAt;
 
     @PrePersist
