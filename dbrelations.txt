@@ -23,7 +23,8 @@ Table photo {
 }
 
 Table ParticipatingPhotos {
-  id integer [primary key]  
+  id integer [primary key]
+  userId integer  
   photoId list
   likes integer
   photoLimit integer
@@ -47,21 +48,13 @@ Table Category {
   participatingPhotoId integer
 }
 
-Table usercontests {  
-  
-  userId integer
-  contestId integer
-}
 
-Ref: "users"."id" < "photo"."user_id"
+
+Ref: "users"."id" < "ParticipatingPhotos"."userId"
 Ref: "users"."id" < "UserParticipation"."userId"
 Ref: "contest"."id" < "UserParticipation"."contestID"
 Ref: "ParticipatingPhotos"."photoId" < "photo"."id"
 Ref: "Category"."id" > "contest"."categoryID"
 Ref: "users"."id" < "JuryLikes"."userId"
 Ref: "JuryLikes"."participatingPhotoId" < "ParticipatingPhotos"."id"
-Ref: "users"."id" < "usercontests"."userId"
-Ref: "contest"."id" < "usercontests"."contestId"
 Ref: "ParticipatingPhotos"."id" < "Category"."participatingPhotoId"
-
-  
