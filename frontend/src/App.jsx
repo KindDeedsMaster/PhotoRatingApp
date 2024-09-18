@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import TestingComponent from './TestingComponent'
+import Test from './Test'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -32,6 +33,7 @@ function App() {
       </p>
       <Routes>
         <Route path = "testing" element={<TestingComponent/>}/>
+        <Route path = "/test" element={<Test/>}/>
       </Routes>
     </>
   )
