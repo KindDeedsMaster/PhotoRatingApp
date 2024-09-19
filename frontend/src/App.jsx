@@ -7,10 +7,13 @@ import Registration from "./pages/Authentication/Registration";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Authentication/Login";
 import Logout from "./pages/Authentication/Logout";
+import NavigationBar from "./components/NavigationBar";
 
 function App() {
   return (
     <>
+      <NavigationBar />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
