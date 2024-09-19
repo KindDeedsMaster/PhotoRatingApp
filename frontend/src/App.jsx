@@ -8,6 +8,7 @@ import Home from "./pages/Home/Home";
 import Login from "./pages/Authentication/Login";
 import Logout from "./pages/Authentication/Logout";
 import NavigationBar from "./components/NavigationBar";
+import CreateContest from "./pages/Contest/CreateContest";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
+        <Route path="/createContest" element={<CreateContest />} />
         <Route path="testing" element={<TestingComponent />} />
         <Route path="/test" element={<Test />} />
         <Route path="/register" element={<Registration />} />

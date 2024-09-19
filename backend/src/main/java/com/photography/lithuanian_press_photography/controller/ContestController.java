@@ -44,7 +44,7 @@ public class ContestController {
     }
 
     @PostMapping
-    public ResponseEntity<Contest> createContest(@RequestBody ContestRequest request) {
+    public ResponseEntity<Contest> createContest(@Validated @RequestBody ContestRequest request) {
         Contest contest = contestService.createContest(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
