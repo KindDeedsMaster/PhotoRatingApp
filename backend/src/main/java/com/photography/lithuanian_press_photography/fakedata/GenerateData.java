@@ -14,6 +14,7 @@ import com.photography.lithuanian_press_photography.repository.UserParticipation
 import com.photography.lithuanian_press_photography.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
@@ -26,6 +27,7 @@ public class GenerateData implements CommandLineRunner {
     private final UserParticipationRepository userParticipationRepository;
     private final CategoryRepository categoryRepository;
     private final Faker faker = new Faker();
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
 
@@ -40,7 +42,7 @@ public class GenerateData implements CommandLineRunner {
     private void generateUsers() {
         User user = User.builder()
                 .email("admin@admin.com")
-                .password("1234")
+                .password(passwordEncoder.encode("1234"))
                 .role(Role.ADMIN)
                 .firstName("Adminas")
                 .lastName("Adminaitis")
@@ -53,7 +55,7 @@ public class GenerateData implements CommandLineRunner {
                 .build();
         User user2 = User.builder()
                 .email("jury@jury.com")
-                .password("1234")
+                .password(passwordEncoder.encode("1234"))
                 .role(Role.JURY)
                 .firstName("Jury")
                 .lastName("Juryte")
@@ -66,7 +68,7 @@ public class GenerateData implements CommandLineRunner {
                 .build();
         User user3 = User.builder()
                 .email("user@user.com")
-                .password("1234")
+                .password(passwordEncoder.encode("1234"))
                 .role(Role.USER)
                 .firstName("User")
                 .lastName("Useris")

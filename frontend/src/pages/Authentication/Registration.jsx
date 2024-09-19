@@ -38,7 +38,7 @@ const Registration = () => {
       })
       .then((response) => {
         alert("user created");
-        navigate("/");
+        navigate("/login");
       })
       .catch((error) => {
         setErrorMessage(error.response.data.detail);

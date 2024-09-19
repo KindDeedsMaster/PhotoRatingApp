@@ -5,6 +5,8 @@ import TestingComponent from "./TestingComponent";
 import Test from "./Test";
 import Registration from "./pages/Authentication/Registration";
 import Home from "./pages/Home/Home";
+import Login from "./pages/Authentication/Login";
+import Logout from "./pages/Authentication/Logout";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
         <Route path="testing" element={<TestingComponent />} />
         <Route path="/test" element={<Test />} />
         <Route path="/register" element={<Registration />} />

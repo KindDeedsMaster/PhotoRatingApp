@@ -4,6 +4,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -89,6 +90,15 @@ public class GlobalExceptionHandler {
         response.setTitle("Parsing Error");
         response.setStatus(response.getStatus());
         response.setDetail(exception.getMessage());
+        return response;
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ProblemDetail handleAuthenticationException (AuthenticationException exception){
+        ProblemDetail response = ProblemDetail.forStatus(401);
+        response.setTitle("Bad Credentials");
+        response.setStatus(response.getStatus());
+        response.setDetail("Incorrect password");
         return response;
     }
 }

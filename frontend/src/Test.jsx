@@ -4,7 +4,7 @@ import axiosInstance from "./axiosInstance";
 
 const Test = () => {
     const[data, seData] = useState(null);    
-    localStorage.setItem("jwtToken", "");
+
     useEffect(() => {
 
     const getData = async() => {
