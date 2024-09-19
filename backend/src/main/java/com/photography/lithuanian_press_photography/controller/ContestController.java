@@ -59,9 +59,9 @@ public class ContestController {
         return ResponseEntity.ok().body(contestService.updateContest(contestRequest, contestId));
     }
 
-    @DeleteMapping("/{contestId}")
-    public ResponseEntity<?> deleteContest(@PathVariable UUID contestId) {
-        contestService.deleteContest(contestId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteContest(@PathVariable UUID id) {
+        contestService.deleteContest(id);
         return ResponseEntity.noContent().build();
     }
 }

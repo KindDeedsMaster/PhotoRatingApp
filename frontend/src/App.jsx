@@ -9,6 +9,8 @@ import Login from "./pages/Authentication/Login";
 import Logout from "./pages/Authentication/Logout";
 import NavigationBar from "./components/NavigationBar";
 import CreateContest from "./pages/Contest/CreateContest";
+import Contests from "./pages/Contest/Contests";
+import ContestDetails from "./pages/Contest/ContestDetails";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/createContest" element={<CreateContest />} />
+        <Route path="/contests" element={<Contests />} />
+        <Route path="/contest/:id" element={<ContestDetails />} />
         <Route path="testing" element={<TestingComponent />} />
         <Route path="/test" element={<Test />} />
         <Route path="/register" element={<Registration />} />
