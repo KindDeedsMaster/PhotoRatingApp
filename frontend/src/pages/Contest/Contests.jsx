@@ -35,9 +35,9 @@ const Contests = () => {
     <>
       <Container>
         <Row>
-          {contestsArray.map((contest) => {
-            return <Contest key={contest.id} contest={contest} />;
-          })}
+          {contestsArray.map((contest) => (
+            <Contest key={contest.id} contest={contest} />
+          ))}
         </Row>
       </Container>
     </>

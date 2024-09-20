@@ -57,7 +57,6 @@ public class Contest {
     @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserParticipation> userParticipation;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "contest", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Category> categories;
 

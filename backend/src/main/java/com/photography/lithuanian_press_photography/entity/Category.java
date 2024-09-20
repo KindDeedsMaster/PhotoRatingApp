@@ -53,6 +53,7 @@ public class Category {
     @Enumerated(EnumType.STRING)
     private PhotoSubmissionType type;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "contest_id")
     private Contest contest;
