@@ -1,8 +1,10 @@
 import { Button, Card, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
-const Category = ({category}) => {
+const Category = ({category}) => {    
+    const onShowDetailsButton = useNavigate();
     const { id, name, maxTotalSubmissions, maxUserSubmissions, type } = category;
-    // const onShowDetailsButton = useNavigate();
+
     return<>
     <Col>
         <Card style={{ width: "18rem" }}>
@@ -13,7 +15,7 @@ const Category = ({category}) => {
             <Card.Text>max user submissions {maxUserSubmissions}</Card.Text>
             <Button
               variant="primary"
-            //   onClick={() => onShowDetailsButton(`/contest/${id}/category`)}
+              onClick={() => onShowDetailsButton(`/category/${id}`)}
             >
               Details
             </Button>
