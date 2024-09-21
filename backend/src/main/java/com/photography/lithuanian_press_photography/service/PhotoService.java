@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -53,21 +54,16 @@ public class PhotoService {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
-    public void createPhotoParticipation(PhotoRequest photoRequest) {
-        storeAll(photoRequest);
 
-    }
-
-    public UUID store(MultipartFile file, UUID categoryId) {
+    public void store(MultipartFile file) {
         UUID photoId = UUID.randomUUID();
         String photoName = photoId + ".jpg";
-        String thumbNail = photoId + ".png";
-        if (file.isEmpty()) {
-            throw new StorageException("Failed to store empty file.");
-        }
         try {
+            if (file.isEmpty()) {
+                throw new StorageException("Failed to store empty file.");
+            }
+
             Path destinationFile = this.rootLocation
-                    .resolve(categoryId.toString())
                     .resolve(photoName)
                     .normalize()
                     .toAbsolutePath();
@@ -80,19 +76,10 @@ public class PhotoService {
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, destinationFile,
                         StandardCopyOption.REPLACE_EXISTING);
-                Path thumbnailPath = this.rootLocation
-                        .resolve(categoryId.toString())
-                        .resolve(thumbNail)
-                        .normalize()
-                        .toAbsolutePath();
-                Thumbnails.of(destinationFile.toString())
-                        .size(160, 160)
-                        .toFile(new File(thumbnailPath.toUri()));
             }
         } catch (IOException e) {
             throw new StorageException("Failed to store file.", e);
         }
-        return photoId;
     }
 
 
@@ -129,11 +116,9 @@ public class PhotoService {
         }
     }
 
-
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
-
 
     public void init() {
         try {
@@ -143,16 +128,13 @@ public class PhotoService {
         }
     }
 
-    @Transactional(rollbackFor = StorageException.class)
-    public void storeAll(PhotoRequest request) {
-        MultipartFile[] files = request.getFiles();
+    public void storeAll(MultipartFile[] files) {
         validateImages(files);
         for (MultipartFile file : files) {
-            UUID photoId = store(file, request.getCategoryId());
-
-
+            store(file);
         }
     }
+
 
     private void validateImages(MultipartFile[] images) {
         for (MultipartFile image : images) {
@@ -167,7 +149,7 @@ public class PhotoService {
                     }
                 } else {
                     if (img.getWidth() < 2500 || img.getWidth() > 4000) {
-                        throw new ImageValidationException(image.getOriginalFilename() + "Image width must be between 2500 and 4000");
+                        throw new ImageValidationException(image.getOriginalFilename() + " Image width must be between 2500 and 4000");
                     }
                 }
             } catch (IOException exception) {

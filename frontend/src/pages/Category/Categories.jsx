@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../../axiosInstance";
 import { Container, Row } from "react-bootstrap";
-
+import Category from "./Category";
+//NOT USED YET
 const Categories = () => {
   const [categoriesArray, setCategoriesArray] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

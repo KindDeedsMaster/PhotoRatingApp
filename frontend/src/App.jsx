@@ -12,6 +12,7 @@ import CreateContest from "./pages/Contest/CreateContest";
 import Contests from "./pages/Contest/Contests";
 import ContestDetails from "./pages/Contest/ContestDetails";
 import CategoryDetails from "./pages/Category/CategoryDetails";
+import PhotoGallary from "./pages/TestPhoto/PhotoGallary";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <NavigationBar />
 
       <Routes>
+        <Route path="/photos" element={<PhotoGallary />} />
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
