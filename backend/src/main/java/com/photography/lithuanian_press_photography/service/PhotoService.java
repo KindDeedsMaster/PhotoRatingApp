@@ -55,8 +55,9 @@ public class PhotoService {
     }
 
 
-    public void store(MultipartFile file) {
+    public void store(UUID categoryId, MultipartFile file) {
         UUID photoId = UUID.randomUUID();
+        String folderName = categoryId.toString();
         String photoName = photoId + ".jpg";
         try {
             if (file.isEmpty()) {
@@ -64,11 +65,12 @@ public class PhotoService {
             }
 
             Path destinationFile = this.rootLocation
+                    .resolve(folderName)
                     .resolve(photoName)
                     .normalize()
                     .toAbsolutePath();
             System.out.println(destinationFile);
-            if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
+            if (!destinationFile.getParent().getParent().equals(this.rootLocation.toAbsolutePath())) {
                 // This is a security check
                 throw new StorageException(
                         "Cannot store file outside current directory.");
@@ -120,18 +122,19 @@ public class PhotoService {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 
-    public void init() {
+    public void init(UUID categoryId) {
+        String categoryLocation = categoryId.toString();
         try {
-            Files.createDirectories(rootLocation);
+            Files.createDirectories(rootLocation.resolve(categoryLocation));
         } catch (IOException e) {
             throw new StorageException("Could not initialize storage", e);
         }
     }
 
-    public void storeAll(MultipartFile[] files) {
+    public void storeAll(UUID categoryId, MultipartFile[] files) {
         validateImages(files);
         for (MultipartFile file : files) {
-            store(file);
+            store(categoryId, file);
         }
     }
 

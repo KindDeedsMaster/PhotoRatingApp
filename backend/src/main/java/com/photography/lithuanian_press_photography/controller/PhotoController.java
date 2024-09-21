@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,18 +28,18 @@ public class PhotoController {
 
     private final PhotoService photoService;
 
-    @GetMapping("/server")
-    public String listUploadedFiles(Model model) throws IOException {
+//    @GetMapping("/server")
+//    public String listUploadedFiles(Model model) throws IOException {
+//
+//        model.addAttribute("files", photoService.loadAll().map(
+//                        path -> MvcUriComponentsBuilder.fromMethodName(PhotoController.class,
+//                                "serveFile", path.getFileName().toString()).build().toUri().toString())
+//                .collect(Collectors.toList()));
+//        return "uploadForm";
+//    }
 
-        model.addAttribute("files", photoService.loadAll().map(
-                        path -> MvcUriComponentsBuilder.fromMethodName(PhotoController.class,
-                                "serveFile", path.getFileName().toString()).build().toUri().toString())
-                .collect(Collectors.toList()));
-        return "uploadForm";
-    }
-
-    @GetMapping("/images")
-    public ResponseEntity<List<String>> listUploadedFiles2() {
+    @GetMapping("/category/{categoryId}/images")
+    public ResponseEntity<List<String>> listUploadedFiles2(@PathVariable UUID categoryId) {
         try {
             Stream<Path> imagesPaths = photoService.loadAll();
             List<String> imageUrls = imagesPaths
@@ -65,9 +66,10 @@ public class PhotoController {
                 "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 
-    @PostMapping("/m")
-    public String handleFilesUpload(@RequestParam("files") MultipartFile[] files) {
-        photoService.storeAll(files);
+    @PostMapping("/category/{categoryId}/upload")
+    public String handleFilesUpload(@PathVariable UUID categoryId,
+                                    @RequestParam("files") MultipartFile[] files) {
+        photoService.storeAll(categoryId, files);
         return "You successfully uploaded photos!";
     }
 

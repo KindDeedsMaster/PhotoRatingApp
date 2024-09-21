@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import axiosInstance from "../../axiosInstance";
+import PhotoGallary from "../TestPhoto/PhotoGallary";
 
 
 const CategoryDetails = () => {
@@ -60,6 +61,7 @@ const CategoryDetails = () => {
           Delete
         </Button>
       </Card>
+      <PhotoGallary categoryId={id}/>
 
     </>
   );

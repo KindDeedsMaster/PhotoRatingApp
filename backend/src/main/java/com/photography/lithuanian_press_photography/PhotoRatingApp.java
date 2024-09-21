@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 
 import com.photography.lithuanian_press_photography.config.StorageProperties;
 
+import java.util.UUID;
+
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 public class PhotoRatingApp {
@@ -17,11 +19,11 @@ public class PhotoRatingApp {
 		SpringApplication.run(PhotoRatingApp.class, args);
 	}
 
-	@Bean
-	CommandLineRunner init(PhotoService photoService) {
-		return (args) -> {
-			photoService.deleteAll();
-			photoService.init();
-		};
-	}
+//	@Bean
+//	CommandLineRunner init(PhotoService photoService) {
+//		return (args) -> {
+//			photoService.deleteAll();
+//			photoService.init(UUID.randomUUID());
+//		};
+//	}
 }

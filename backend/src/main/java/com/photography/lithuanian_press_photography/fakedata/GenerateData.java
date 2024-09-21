@@ -12,6 +12,7 @@ import com.photography.lithuanian_press_photography.repository.CategoryRepositor
 import com.photography.lithuanian_press_photography.repository.ContestRepository;
 import com.photography.lithuanian_press_photography.repository.UserParticipationRepository;
 import com.photography.lithuanian_press_photography.repository.UserRepository;
+import com.photography.lithuanian_press_photography.service.PhotoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,6 +27,7 @@ public class GenerateData implements CommandLineRunner {
     private final ContestRepository contestRepository;
     private final UserParticipationRepository userParticipationRepository;
     private final CategoryRepository categoryRepository;
+    private final PhotoService photoService;
     private final Faker faker = new Faker();
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -33,10 +35,11 @@ public class GenerateData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        photoService.deleteAll();
         generateUsers();
-        generateContests(10);
+        generateContests(2);
         generateParticipation(10);
-        generateCategory(15);
+        generateCategory(1);
     }
 
     private void generateUsers() {
@@ -101,7 +104,7 @@ public class GenerateData implements CommandLineRunner {
             UserParticipation userParticipation = UserParticipation.builder()
                     .status(ParticipationStatus.PENDING)
                     .user(userRepository.findAll().get(faker.number().numberBetween(0,3)))
-                    .contest(contestRepository.findAll().get(faker.number().numberBetween(0,10)))
+                    .contest(contestRepository.findAll().get(faker.number().numberBetween(0,1)))
                     .build();
             userParticipationRepository.save(userParticipation);
         }
@@ -114,10 +117,12 @@ public class GenerateData implements CommandLineRunner {
                     .description(faker.lorem().sentence(15))
                     .name(faker.commerce().productName())
                     .maxUserSubmissions(5)
-                    .contest(contestRepository.findAll().get(faker.number().numberBetween(0,10)))
+                    .contest(contestRepository.findAll().get(faker.number().numberBetween(0,1)))
                     .maxUserSubmissions(22)
                     .build();
+
             categoryRepository.save(category);
+            photoService.init(category.getId());
         }
     }
 }

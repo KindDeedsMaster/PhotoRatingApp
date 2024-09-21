@@ -1,19 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-const PhotoGallary = () => {
+const PhotoGallary = ({categoryId}) => {
+//   const { categoryId } = useParams();
   const [imageUrls, setImageUrls] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/images")
+      .get(`http://localhost:8080/category/${categoryId}/images`)
       .then((response) => {
+        console.log(response);
         setImageUrls(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [categoryId]);
 
   return (
     <div>
