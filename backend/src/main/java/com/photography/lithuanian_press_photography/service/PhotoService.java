@@ -46,14 +46,11 @@ public class PhotoService {
 
     @Autowired
     public PhotoService(StorageProperties properties) {
-
         if (properties.getLocation().trim().length() == 0) {
             throw new StorageException("File upload location can not be Empty.");
         }
-
         this.rootLocation = Paths.get(properties.getLocation());
     }
-
 
     public void store(UUID categoryId, MultipartFile file) {
         UUID photoId = UUID.randomUUID();
@@ -84,34 +81,29 @@ public class PhotoService {
         }
     }
 
-
-    public Stream<Path> loadAll() {
+    public Stream<Path> loadAll(String categoryId) {
         try {
-            return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
-                    .map(this.rootLocation::relativize);
+            return Files.walk(this.rootLocation.resolve(categoryId), 1)
+                    .filter(path -> !path.equals(this.rootLocation.resolve(categoryId)))
+                    .map(this.rootLocation.resolve(categoryId)::relativize);
         } catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }
-
     }
 
-
-    public Path load(String filename) {
-        return rootLocation.resolve(filename);
+    public Path load(String categoryId, String filename) {
+        return rootLocation.resolve(categoryId).resolve(filename);
     }
 
-
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String categoryId, String filename) {
         try {
-            Path file = load(filename);
+            Path file = load(categoryId, filename);
             Resource resource = new UrlResource(file.toUri());
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
                 throw new StorageFileNotFoundException(
                         "Could not read file: " + filename);
-
             }
         } catch (MalformedURLException e) {
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
@@ -137,7 +129,6 @@ public class PhotoService {
             store(categoryId, file);
         }
     }
-
 
     private void validateImages(MultipartFile[] images) {
         for (MultipartFile image : images) {

@@ -28,8 +28,8 @@ app:
         collection: 6
     security:
       jwt-secret-key: 358baa9cd28d0202e94c97a1812a41fffaab099ff27a6a0050bcefed38866154
-logging:
-  level:
-    org:
-      springframework:
-        web: DEBUG
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        web: DEBUG

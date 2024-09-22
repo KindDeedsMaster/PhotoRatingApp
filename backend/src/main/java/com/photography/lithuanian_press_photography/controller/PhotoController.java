@@ -39,11 +39,11 @@ public class PhotoController {
 //    }
 
     @GetMapping("/category/{categoryId}/images")
-    public ResponseEntity<List<String>> listUploadedFiles2(@PathVariable UUID categoryId) {
+    public ResponseEntity<List<String>> listUploadedFiles(@PathVariable UUID categoryId) {
         try {
-            Stream<Path> imagesPaths = photoService.loadAll();
+            Stream<Path> imagesPaths = photoService.loadAll(categoryId.toString());
             List<String> imageUrls = imagesPaths
-                    .map(path -> MvcUriComponentsBuilder.fromMethodName(PhotoController.class, "serveFile", path.getFileName().toString())
+                    .map(path -> MvcUriComponentsBuilder.fromMethodName(PhotoController.class, "serveFile", categoryId.toString(), path.getFileName().toString())
                             .build()
                             .toString())
                     .toList();
@@ -53,17 +53,17 @@ public class PhotoController {
         }
     }
 
-    @GetMapping("/files/{filename:.+}")
+    @GetMapping("/{categoryId}/{filename:.+}")
     @ResponseBody
-    public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-
-        Resource file = photoService.loadAsResource(filename);
-
+    public ResponseEntity<Resource> serveFile(@PathVariable String categoryId,
+                                              @PathVariable String filename) {
+        Resource file = photoService.loadAsResource(categoryId, filename);
         if (file == null)
             return ResponseEntity.notFound().build();
 
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getFilename() + "\"")
+                .body(file);
     }
 
     @PostMapping("/category/{categoryId}/upload")

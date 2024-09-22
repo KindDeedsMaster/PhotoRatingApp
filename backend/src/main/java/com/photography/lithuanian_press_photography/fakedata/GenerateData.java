@@ -39,7 +39,7 @@ public class GenerateData implements CommandLineRunner {
         generateUsers();
         generateContests(2);
         generateParticipation(10);
-        generateCategory(1);
+        generateCategory(3);
     }
 
     private void generateUsers() {
